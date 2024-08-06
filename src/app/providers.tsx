@@ -14,7 +14,7 @@ export const ReactQueryProvider = ({
 export const GoogleAnalytics = () => {
 	return (
 		<GoogleAnalyticsComponent
-			gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
+			gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ?? ""}
 		/>
 	);
 };

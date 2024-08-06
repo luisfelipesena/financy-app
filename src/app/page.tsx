@@ -1,7 +1,6 @@
-import { ToastDemo } from "~/app/components/toast-button";
-import { Button } from "~/app/components/ui/button";
+import { Button } from "~/components/ui/button";
 import { getUsers } from "~/server/queries";
-import { TestApiButton } from "~/app/components/test-api-button";
+import { TestApiButton } from "~/components/test-api-button";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +11,9 @@ export default function HomePage() {
 				<h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
 					<span className="text-[hsl(280,100%,70%)]">LOVE U</span> Rai ai
 				</h1>
-
+			</div>
+			<div className="flex flex-wrap gap-4 justify-center">
+				<TestApiButton />
 				<form
 					action={async () => {
 						"use server";
@@ -21,12 +22,8 @@ export default function HomePage() {
 						console.log({ users });
 					}}
 				>
-					<Button>Users Banco de dados</Button>
+					<Button className="w-36">Users DB</Button>
 				</form>
-			</div>
-			<div className="flex flex-wrap gap-4 justify-center">
-				<ToastDemo />
-				<TestApiButton />
 			</div>
 		</main>
 	);

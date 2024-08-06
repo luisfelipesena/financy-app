@@ -6,8 +6,8 @@ import { dark } from "@clerk/themes";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import { TopNav } from "~/app/components/top-nav";
-import { Toaster } from "~/app/components/ui/toaster";
+import { TopNav } from "~/components/top-nav";
+import { Toaster } from "~/components/ui/sonner";
 import { GoogleAnalytics, ReactQueryProvider } from "./providers";
 
 export const metadata: Metadata = {

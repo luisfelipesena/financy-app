@@ -15,9 +15,9 @@ export const ratelimiter = new RateLimiter(kv);
 
 export const checkRateLimit = async () => {
 	const { userId } = auth();
-	if (!userId) throw new Error("User not signed in");
+	if (!userId) throw new Error("Usuário não está logado");
 	const rateLimitResponse = await ratelimiter.isRateLimitReached(userId);
 	if (!rateLimitResponse) {
-		throw new Error("Rate limit exceeded");
+		throw new Error("Limite de requisições excedido");
 	}
 };

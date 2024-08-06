@@ -8,8 +8,7 @@ import type { Metadata } from "next";
 
 import { TopNav } from "~/app/components/top-nav";
 import { Toaster } from "~/app/components/ui/toaster";
-import { ReactQueryProvider } from "./providers";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, ReactQueryProvider } from "./providers";
 
 export const metadata: Metadata = {
 	title: "Financy App",
@@ -33,9 +32,7 @@ export default function RootLayout({
 			}}
 		>
 			<html lang="pt" className={`${GeistSans.variable}`}>
-				<GoogleAnalytics
-					gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
-				/>
+				<GoogleAnalytics />
 				<ReactQueryProvider>
 					<body>
 						<Toaster />

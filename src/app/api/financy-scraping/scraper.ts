@@ -3,18 +3,18 @@ import * as cheerio from "cheerio";
 import type { Team } from "./models";
 import { logger } from "~/logger";
 
-const BID_HOST_URL = "https://bid.cbf.com.br";
-const BID_JSON_URL = "https://bid.cbf.com.br/combo-clubes-json";
-const BID_CAPTCHA_URL = "https://bid.cbf.com.br/get-captcha-base64";
+const FINANCY_HOST_URL = "https://financy.cbf.com.br";
+const FINANCY_JSON_URL = "https://financy.cbf.com.br/combo-clubes-json";
+const FINANCY_CAPTCHA_URL = "https://financy.cbf.com.br/get-captcha-base64";
 
-class BidHtmlScraper {
-	private log = logger.child({ name: "BidHtmlScraper" });
+class FinancyHtmlScraper {
+	private log = logger.child({ name: "FinancyHtmlScraper" });
 	private captchaText: string | undefined;
 	private cookies: string | undefined;
 	private csrfToken: string | undefined;
 	private teams: Team.Default[] = [];
 
-	public async getBidHtml(): Promise<Team.Default[]> {
+	public async getFinancyHtml(): Promise<Team.Default[]> {
 		try {
 			this.log.info("Initiating scraping...");
 			const html = await this.getInitialHtml();
@@ -23,14 +23,14 @@ class BidHtmlScraper {
 				{ csrfToken: this.csrfToken },
 				"CSRF token found, getting captcha...",
 			);
-			const captcha = await this.getBidCaptcha();
+			const captcha = await this.getFinancyCaptcha();
 			this.log.info("Getting captcha text...");
 			const text = await this.readCaptcha(captcha);
 			this.log.info(
 				{ captchaText: text },
 				"Captcha text found, getting JSONs...",
 			);
-			const jsonData = await this.getBidJsonData();
+			const jsonData = await this.getFinancyJsonData();
 			await this.setTeams(jsonData);
 			this.log.info({ amount: this.teams.length }, "Teams found, returning...");
 			return this.teams;
@@ -41,7 +41,7 @@ class BidHtmlScraper {
 	}
 
 	private async getInitialHtml(): Promise<string> {
-		const response = await axios.get(BID_HOST_URL);
+		const response = await axios.get(FINANCY_HOST_URL);
 		this.cookies = response.headers["set-cookie"]?.join("; ") ?? "";
 		return response.data;
 	}
@@ -53,8 +53,8 @@ class BidHtmlScraper {
 		this.csrfToken = csrfToken;
 	}
 
-	private async getBidCaptcha(): Promise<string> {
-		const response = await axios.get(BID_CAPTCHA_URL, {
+	private async getFinancyCaptcha(): Promise<string> {
+		const response = await axios.get(FINANCY_CAPTCHA_URL, {
 			headers: { cookie: this.cookies ?? "", ...this.getDefaultHeaders() },
 		});
 		return response.data;
@@ -65,14 +65,14 @@ class BidHtmlScraper {
 		return testext;
 	}
 
-	private async getBidJsonData(): Promise<Team.ApiResponse[]> {
+	private async getFinancyJsonData(): Promise<Team.ApiResponse[]> {
 		const response = await axios.post<Team.ApiResponse[]>(
-			BID_JSON_URL,
+			FINANCY_JSON_URL,
 			this.captchaText,
 			{
 				headers: {
 					cookie: this.cookies ?? "",
-					Origin: BID_HOST_URL,
+					Origin: FINANCY_HOST_URL,
 					"X-Csrf-Token": this.csrfToken ?? "",
 					...this.getDefaultHeaders(),
 				},
@@ -102,10 +102,10 @@ class BidHtmlScraper {
 			"Cache-Control": "max-age=0",
 			Connection: "keep-alive",
 			"Upgrade-Insecure-Requests": "1",
-			Host: new URL(BID_HOST_URL).hostname,
-			Referer: BID_HOST_URL,
+			Host: new URL(FINANCY_HOST_URL).hostname,
+			Referer: FINANCY_HOST_URL,
 		};
 	}
 }
 
-export const bidHtmlScraper = new BidHtmlScraper();
+export const financyHtmlScraper = new FinancyHtmlScraper();

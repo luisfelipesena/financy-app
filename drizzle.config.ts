@@ -8,5 +8,5 @@ export default {
 	dbCredentials: {
 		url: env.POSTGRES_URL,
 	},
-	tablesFilter: ["bid-app_*"],
+	tablesFilter: ["financy-app_*"],
 } satisfies Config;

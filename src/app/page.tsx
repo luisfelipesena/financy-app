@@ -1,6 +1,5 @@
-import { TestApiButton } from "~/components/test-api-button";
-import { ToastDemo } from "~/components/toast-button";
-import { Button } from "~/components/ui/button";
+import { ToastDemo } from "~/app/components/toast-button";
+import { Button } from "~/app/components/ui/button";
 import { getUsers } from "~/server/queries";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +25,6 @@ export default function HomePage() {
 			</div>
 			<div className="flex flex-wrap gap-4 justify-center">
 				<ToastDemo />
-				<TestApiButton />
 			</div>
 		</main>
 	);

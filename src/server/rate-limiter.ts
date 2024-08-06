@@ -1,25 +1,23 @@
 import { auth } from "@clerk/nextjs/server";
-import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
-import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
+import { kv, type VercelKV } from "@vercel/kv";
+import { KvRedis } from "./kv-redis";
 
-// Create a new ratelimiter, that allows 10 requests per 10 seconds
-export const ratelimiter = new Ratelimit({
-	redis: Redis.fromEnv(),
-	limiter: Ratelimit.slidingWindow(10, "10 s"),
-	analytics: true,
-	/**
-	 * Optional prefix for the keys used in redis. This is useful if you want to share a redis
-	 * instance with other applications and want to avoid key collisions. The default prefix is
-	 * "@upstash/ratelimit"
-	 */
-	prefix: "@upstash/ratelimit",
-});
+class RateLimiter extends KvRedis {
+	private maxRequests = 10;
+	private ttl = 10;
+
+	async isRateLimitReached(key: string) {
+		return await this.isLimitReached(key, this.maxRequests, this.ttl);
+	}
+}
+
+export const ratelimiter = new RateLimiter(kv);
 
 export const checkRateLimit = async () => {
 	const { userId } = auth();
 	if (!userId) throw new Error("User not signed in");
-	const rateLimitResponse = await ratelimiter.limit(userId);
-	if (!rateLimitResponse.success) {
+	const rateLimitResponse = await ratelimiter.isRateLimitReached(userId);
+	if (!rateLimitResponse) {
 		throw new Error("Rate limit exceeded");
 	}
 };

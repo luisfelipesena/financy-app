@@ -6,13 +6,14 @@ import { dark } from "@clerk/themes";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import { TopNav } from "~/components/top-nav";
-import { Toaster } from "~/components/ui/toaster";
-import { CSPostHogProvider, ReactQueryProvider } from "./providers";
+import { TopNav } from "~/app/components/top-nav";
+import { Toaster } from "~/app/components/ui/toaster";
+import { ReactQueryProvider } from "./providers";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
-	title: "BID Dashs",
-	description: "Site da BID CBF",
+	title: "Financy App",
+	description: "Site de Finanças Brasileiras",
 	icons: [
 		{
 			rel: "icon",
@@ -32,14 +33,15 @@ export default function RootLayout({
 			}}
 		>
 			<html lang="pt" className={`${GeistSans.variable}`}>
+				<GoogleAnalytics
+					gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
+				/>
 				<ReactQueryProvider>
-					<CSPostHogProvider>
-						<body>
-							<Toaster />
-							<TopNav />
-							<main className="p-4">{children}</main>
-						</body>
-					</CSPostHogProvider>
+					<body>
+						<Toaster />
+						<TopNav />
+						<main className="p-4">{children}</main>
+					</body>
 				</ReactQueryProvider>
 			</html>
 		</ClerkProvider>

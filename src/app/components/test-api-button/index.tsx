@@ -1,9 +1,9 @@
 "use client";
-import { bidScraping } from "~/app/api/bid-scraping/client-factory";
+import { financyScraping } from "~/app/api/financy-scraping/client-factory";
 import { Button } from "../ui/button";
 
 export const TestApiButton = () => {
-	const { data, isLoading, refetch } = bidScraping();
+	const { data, isLoading, refetch } = financyScraping();
 
 	return (
 		<Button onClick={() => refetch()}>

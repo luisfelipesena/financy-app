@@ -1,10 +1,10 @@
 import { checkRateLimit } from "~/server/rate-limiter";
-import { bidHtmlScraper } from "./scraper";
+import { financyHtmlScraper } from "./scraper";
 
 export async function GET() {
 	await checkRateLimit();
 	try {
-		const scraperResponse = await bidHtmlScraper.getBidHtml();
+		const scraperResponse = await financyHtmlScraper.getFinancyHtml();
 		console.debug({ scraperResponse }, "Scraper response");
 	} catch (error) {
 		console.error({ error });
